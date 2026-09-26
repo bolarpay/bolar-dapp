@@ -20,6 +20,7 @@ Scripts: `pnpm dev`, `pnpm build`, `pnpm start`, `pnpm lint`. Chequeo de tipos: 
 app/layout.tsx    # root layout (Server Component), fuentes Geist, metadata
 app/page.tsx      # carga pollar-app con next/dynamic { ssr: false }
 app/pollar-app.tsx # PollarProvider + UI: login Google y pago USDC (solo cliente)
+app/pollar-login-modal.css # marco CSS del modal de login (openLoginModal), sobre @pollar/react/styles.css
 app/globals.css   # Tailwind 4 y colores claro/oscuro
 next.config.ts    # vacío
 .env.example      # plantilla de variables; copiar a .env

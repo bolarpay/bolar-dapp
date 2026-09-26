@@ -1,0 +1,105 @@
+/*
+ * Marco para el modal de login de Pollar (openLoginModal).
+ * Se carga después de @pollar/react/styles.css y solo cambia la presentación:
+ * fondo, marco, barra de título y animación. La lógica sigue siendo del SDK.
+ *
+ * El SDK pone sus variables --pollar-* como estilo inline en la tarjeta, así que
+ * aquí se sobrescriben propiedades concretas en lugar de esas variables.
+ */
+
+:root {
+  --frame-accent: #6366f1;
+  --frame-ring: rgb(99 102 241 / 0.35);
+  --frame-bar-height: 2.25rem;
+  --frame-radius: 1.25rem;
+}
+
+/* Fondo: oscurece y desenfoca la página detrás del modal */
+.pollar-overlay:has(> .pollar-modal) {
+  background-color: rgb(10 10 20 / 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: frame-fade-in 180ms ease-out;
+}
+
+/* Tarjeta con marco: borde de acento, anillo exterior y barra superior */
+.pollar-modal-card.pollar-modal {
+  border: 1px solid var(--frame-accent);
+  border-radius: var(--frame-radius);
+  padding-top: calc(var(--frame-bar-height) + 1.25rem);
+  box-shadow:
+    0 0 0 6px var(--frame-ring),
+    0 30px 60px -15px rgb(0 0 0 / 0.45);
+  animation: frame-pop-in 220ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+/* Barra de título del marco */
+.pollar-modal-card.pollar-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: var(--frame-bar-height);
+  border-radius: calc(var(--frame-radius) - 1px) calc(var(--frame-radius) - 1px) 0 0;
+  background: linear-gradient(90deg, var(--frame-accent), #8b5cf6);
+  pointer-events: none;
+}
+
+/* Tres puntos decorativos a la izquierda de la barra */
+.pollar-modal-card.pollar-modal::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--frame-bar-height) / 2 - 0.25rem);
+  left: 1rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.9);
+  box-shadow:
+    0.85rem 0 0 rgb(255 255 255 / 0.65),
+    1.7rem 0 0 rgb(255 255 255 / 0.4);
+  pointer-events: none;
+}
+
+/* Botón de cerrar dentro de la barra */
+.pollar-modal .pollar-close-btn {
+  position: absolute;
+  top: calc(var(--frame-bar-height) / 2 - 0.875rem);
+  right: 0.625rem;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-color: rgb(255 255 255 / 0.4);
+  color: #fff;
+}
+
+.pollar-modal .pollar-close-btn:hover {
+  background-color: rgb(255 255 255 / 0.15);
+}
+
+/* Botones sociales con el acento al pasar el ratón */
+.pollar-modal .pollar-social-btn:hover {
+  border-color: var(--frame-accent);
+}
+
+@keyframes frame-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes frame-pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pollar-overlay:has(> .pollar-modal),
+  .pollar-modal-card.pollar-modal {
+    animation: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --frame-ring: rgb(129 140 248 / 0.3);
+  }
+}
