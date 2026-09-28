@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f9fcfa;
+  --foreground: #011e24;
+  color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-inter);
+  --font-footer: var(--font-open-sans);
+  --color-bolar-green: #004d1a;
+  --color-bolar-dark: #000c06;
+  --color-content-secondary: #475659;
+  --color-content-tertiary: #95a3a6;
+  --color-field: #edf2ef;
+  --color-card-border: #f3f6f5;
+  --color-footer-green: #44b86d;
+  --color-footer-ink: #222d3d;
+  --shadow-quote: 0 8px 18px rgb(0 0 0 / 6%);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  button, select, summary { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--color-bolar-green); outline-offset: 4px; }
+}
+
+@layer components {
+  .nav-link { @apply flex items-center justify-center rounded-lg px-4 py-[14px] text-base font-medium leading-5 transition-colors hover:bg-field; }
+  .primary-button { @apply rounded-lg bg-bolar-green px-5 py-4 text-center text-lg font-medium leading-6 text-field transition-colors hover:bg-bolar-dark; }
+  .bolar-dialog { @apply fixed inset-0 m-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] max-w-[460px] overflow-y-auto rounded-2xl border border-field bg-white p-6 font-sans text-foreground shadow-xl; }
+  .bolar-dialog::backdrop { background: rgb(0 12 6 / 45%); }
+}
+
+@utility trim-cap {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
