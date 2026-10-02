@@ -18,8 +18,14 @@ Scripts: `pnpm dev`, `pnpm build`, `pnpm start`, `pnpm lint`. Chequeo de tipos: 
 
 ```
 app/layout.tsx    # root layout (Server Component), fuentes Geist, metadata
-app/page.tsx      # carga pollar-app con next/dynamic { ssr: false }
-app/pollar-app.tsx # PollarProvider + UI: login Google y pago USDC (solo cliente)
+app/providers.tsx # ÚNICO PollarProvider (cliente); montado en layout.tsx
+app/page.tsx      # landing "/" (Server Component); calculadora vía GatedCalculator
+app/acceso/       # "/acceso": carga pollar-app con next/dynamic { ssr: false }
+app/pollar-app.tsx # UI de cuenta: login, WalletButton, pago USDC (usa usePollar)
+app/login-button.tsx, app/pay-button.tsx # botones que usan usePollar
+components/landing/header-wallet.tsx     # isla ssr:false con WalletButton
+components/landing/gated-calculator*.tsx # isla ssr:false: calculadora solo con sesión
+components/remittance/remittance-flow.tsx # flujo de remesa (usa usePollar)
 app/pollar-login-modal.css # marco CSS del modal de login (openLoginModal), sobre @pollar/react/styles.css
 app/globals.css   # Tailwind 4 y colores claro/oscuro
 next.config.ts    # vacío
@@ -27,15 +33,15 @@ next.config.ts    # vacío
 cursor.md         # misma guía para Cursor; mantener en sincronía
 ```
 
-`PollarProvider` vive en `app/pollar-app.tsx`, no en el layout. Se carga con `ssr: false` porque `PollarClient` usa APIs del navegador y avisa si se construye en el servidor. Cualquier componente nuevo que cree el cliente debe cargarse igual.
+`PollarProvider` vive solo en `app/providers.tsx`, envolviendo `{children}` en `app/layout.tsx`. No crear otro `PollarProvider`: habría varios clientes con estado separado. `Providers` solo monta el provider después de hidratar (`useSyncExternalStore`), porque PollarClient usa APIs del navegador. No usar `typeof window` para eso: cambia la forma del árbol, desajusta los ids de `useId()` y da hydration mismatch; por eso todo componente que llame `usePollar()` o use un componente de Pollar debe cargarse con `next/dynamic` y `{ ssr: false }`, o estar debajo de uno que ya lo esté.
 
 ## Variables de entorno
 
 | Variable | Dónde se usa | Notas |
 |---|---|---|
-| `NEXT_PUBLIC_POLLAR_PUBLISHABLE_KEY` | `app/pollar-app.tsx` → `PollarProvider client.apiKey` | `pub_testnet_…` o `pub_mainnet_…`. Se inlinea en el bundle del cliente en build. |
-| `NEXT_PUBLIC_USDC_ISSUER` | `app/pollar-app.tsx` → `asset.issuer` del pago | Emisor USDC de Circle. Testnet `GBBD47IF…FLA5`, mainnet `GA5ZSEJY…KZVN` (valores completos en `.env.example`). Debe coincidir con la red de la key. |
-| `NEXT_PUBLIC_PAYMENT_DESTINATION` | `app/pollar-app.tsx` → `destination` del pago | Cuenta `G…` receptora. Debe existir y tener trustline a USDC con ese issuer. |
+| `NEXT_PUBLIC_POLLAR_PUBLISHABLE_KEY` | `app/providers.tsx` → `PollarProvider client.apiKey` | `pub_testnet_…` o `pub_mainnet_…`. Se inlinea en el bundle del cliente en build. |
+| `NEXT_PUBLIC_USDC_ISSUER` | `app/pay-button.tsx` → `asset.issuer` del pago | Emisor USDC de Circle. Testnet `GBBD47IF…FLA5`, mainnet `GA5ZSEJY…KZVN` (valores completos en `.env.example`). Debe coincidir con la red de la key. |
+| `NEXT_PUBLIC_PAYMENT_DESTINATION` | `app/pay-button.tsx` → `destination` del pago | Cuenta `G…` receptora. Debe existir y tener trustline a USDC con ese issuer. |
 | `BACKEND_POLLAR_KEY` | nada todavía | Clave `sec_…`. Solo servidor (Route Handlers / Server Actions). Nunca con prefijo `NEXT_PUBLIC_`. |
 
 - Solo las variables con prefijo `NEXT_PUBLIC_` llegan al navegador. En un Client Component, `process.env.OTRA_COSA` es `undefined`.
@@ -52,7 +58,7 @@ cursor.md         # misma guía para Cursor; mantener en sincronía
 ## Cómo extenderlo
 
 - Next.js 16 no coincide con APIs antiguas. Antes de escribir código de framework, leer la guía en `node_modules/next/dist/docs/`. `AGENTS.md` lo regenera `next dev`; no borrarlo.
-- Dejar `app/layout.tsx` como Server Component. `PollarProvider` ya es client; puede vivir en un wrapper cliente. Quien llame `usePollar()` necesita `'use client'`.
+- Dejar `app/layout.tsx` como Server Component. `PollarProvider` vive en el wrapper cliente `app/providers.tsx`. Quien llame `usePollar()` necesita `'use client'`.
 - Instanciar el cliente una sola vez. La prop `client` queda fijada en el primer render; cambiarla después no hace nada.
 - `login()` devuelve `void`. La UI sale de `isAuthenticated`, `wallet` y el estado de auth, no del valor de retorno.
 - Para un pago nativo usar `asset: { type: 'native' }`. USDC es `credit_alphanum4` con `code` e `issuer` reales. Importes en string (`'10.00'`).
