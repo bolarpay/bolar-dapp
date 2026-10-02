@@ -1,5 +1,5 @@
 import Image from "next/image";
-import heroImage from "@/public/assets/landing/familias-bolar.jpg";
+import heroImage from "@/public/assets/landing/familias-bolar.png";
 
 export function HeroImage() {
   return (
