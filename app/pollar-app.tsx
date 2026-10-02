@@ -3,6 +3,8 @@
 import { PollarProvider, WalletButton } from '@pollar/react';
 import '@pollar/react/styles.css';
 import './header.css';
+import { LoginButton } from './login-button';
+import { PayButton } from './pay-button';
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
       <div className="app-header__wallet">
         <WalletButton />
       </div>
+      <LoginButton />
+      <PayButton />
     </header>
   );
 }
