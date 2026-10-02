@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { PollarProvider, usePollar } from "@pollar/react";
-import "@pollar/react/styles.css";
+import { usePollar } from "@pollar/react";
 import { RemittanceSteps, type RemittanceStepsProps } from "./remittance-steps";
 
 function AuthenticatedFlow(props: RemittanceStepsProps) {
@@ -44,5 +43,5 @@ export default function RemittanceFlow(props: RemittanceStepsProps) {
     error: "El acceso todavía no está habilitado. Puedes completar los datos y volver cuando esté disponible.",
     signIn: () => {}, cancel: () => {},
   }} />;
-  return <PollarProvider client={{ apiKey }}><AuthenticatedFlow {...props} /></PollarProvider>;
+  return <AuthenticatedFlow {...props} />;
 }

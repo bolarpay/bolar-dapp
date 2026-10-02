@@ -2,7 +2,7 @@ import { BrandStrip } from "@/components/landing/brand-strip";
 import { CountryFlags } from "@/components/landing/country-flags";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingHeader } from "@/components/landing/landing-header";
-import { RemittanceCalculator } from "@/components/landing/remittance-calculator";
+import { GatedCalculator } from "@/components/landing/gated-calculator";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
             <h1 className="w-full text-center text-[34px] font-bold leading-[1.2] sm:text-[44px] sm:leading-[56px] lg:w-[800px] lg:text-[52px] lg:leading-[64px]">Envía dinero.<br />Ahorra tiempo y gasta menos.</h1>
             <p className="w-full pb-3 text-center text-base leading-6 text-content-secondary sm:text-xl lg:w-[800px]">Envía dinero a otro país y haz que tu familiar o amigo lo reciba en minutos.</p>
           </div>
-          <RemittanceCalculator />
+          <GatedCalculator />
           <BrandStrip />
         </div>
       </main>

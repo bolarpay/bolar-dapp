@@ -1,8 +1,6 @@
 "use client";
 
-import { PollarProvider, WalletButton, usePollar } from "@pollar/react";
-import "@pollar/react/styles.css";
-import "./pollar-login-modal.css";
+import { WalletButton, usePollar } from "@pollar/react";
 import { LoginButton } from "./login-button";
 import { PayButton } from "./pay-button";
 
@@ -49,5 +47,5 @@ export default function PollarApp() {
   if (!apiKey) {
     return <div role="status"><h1 className="text-2xl font-bold">El acceso estará disponible pronto</h1><p className="mt-4 leading-7 text-content-secondary">Estamos preparando el inicio de sesión. Mientras tanto, puedes explorar el simulador desde la portada.</p></div>;
   }
-  return <PollarProvider client={{ apiKey }}><AccountAccess /></PollarProvider>;
+  return <AccountAccess />;
 }
