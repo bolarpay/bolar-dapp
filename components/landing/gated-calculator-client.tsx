@@ -1,11 +1,14 @@
 "use client";
 
-import { usePollar } from "@pollar/react";
-import { HeroImage } from "./hero-image";
 import { RemittanceCalculator } from "./remittance-calculator";
+import { useRemittanceAuth } from "@/components/remittance/use-remittance-auth";
+
+function ConnectedCalculator() {
+  const auth = useRemittanceAuth();
+  return <RemittanceCalculator auth={auth} />;
+}
 
 export default function GatedCalculatorClient() {
-  const { isAuthenticated, verified } = usePollar();
-  if (isAuthenticated && verified) return <RemittanceCalculator />;
-  return <HeroImage />;
+  if (!process.env.NEXT_PUBLIC_POLLAR_PUBLISHABLE_KEY) return <RemittanceCalculator />;
+  return <ConnectedCalculator />;
 }
