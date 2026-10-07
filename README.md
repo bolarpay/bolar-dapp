@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+La [guía de trabajo de BOLAR](docs/guia-de-trabajo-bolar.md) documenta el estado revisado del MVP, las etapas propuestas y el formato de reportes acordado con el equipo.
+
 ## Getting Started
 
 First, run the development server:
