@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 La [guía de trabajo de BOLAR](docs/guia-de-trabajo-bolar.md) documenta el estado revisado del MVP, las etapas propuestas y el formato de reportes acordado con el equipo.
 
+Los cambios del conversor, el acceso con Gmail, los métodos en efectivo y la configuración de WhatsApp están documentados en [Landing y conversor](docs/landing-conversor.md).
+
 ## Getting Started
 
 First, run the development server:

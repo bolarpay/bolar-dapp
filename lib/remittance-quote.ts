@@ -1,6 +1,3 @@
-// Figma's illustrative BRL -> BOB rate. This is NOT a live exchange quote.
-export const DEMO_RATE_LABEL = "1BRL=2.3BOB";
-
 export function parseAmount(value: string): number | null {
   if (!/^\d{1,9}(?:[.,]\d{1,2})?$/.test(value)) return null;
   const [whole, fraction = ""] = value.replace(",", ".").split(".");
@@ -11,9 +8,10 @@ export function formatAmount(cents: number): string {
   return (cents / 100).toFixed(2).replace(/\.?0+$/, "");
 }
 
-export function convertAmount(value: string, direction: "send" | "receive"): string {
+export function convertAmount(value: string, direction: "send" | "receive", rate: number): string {
   const cents = parseAmount(value);
-  if (cents === null) return "";
-  const converted = direction === "send" ? Math.round(cents * 23 / 10) : Math.round(cents * 10 / 23);
+  if (cents === null || !Number.isFinite(rate) || rate <= 0) return "";
+  const converted = direction === "send" ? Math.round(cents * rate) : Math.round(cents / rate);
+  if (!Number.isSafeInteger(converted) || converted > 99_999_999_999) return "";
   return formatAmount(converted);
 }

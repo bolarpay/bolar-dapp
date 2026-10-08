@@ -1,12 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { HeroImage } from "./hero-image";
+import { RemittanceCalculator } from "./remittance-calculator";
+import { unavailableAuth } from "@/components/remittance/use-remittance-auth";
 
-// Muestra la calculadora solo con sesión. usePollar() necesita el provider del
-// navegador, así que la isla no se renderiza en el servidor; mientras carga se
-// ve la misma imagen que verá quien no ha iniciado sesión.
+// Calculation is public; only continuing requires a verified Pollar session.
+// The connected island waits for the browser provider before using its hooks.
 export const GatedCalculator = dynamic(() => import("./gated-calculator-client"), {
   ssr: false,
-  loading: () => <HeroImage />,
+  loading: () => <RemittanceCalculator auth={{ ...unavailableAuth, loading: true, error: "" }} />,
 });
