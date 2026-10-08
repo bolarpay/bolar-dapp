@@ -33,8 +33,8 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
   const upload = useRef<HTMLInputElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const selection = useRef(0);
-  const needsQr = deliveryMethod === "qr";
-  const recipientComplete = Boolean((!needsQr || file) && name.trim() && reason);
+  const showQrUpload = deliveryMethod === "qr";
+  const recipientComplete = Boolean(name.trim() && reason);
   const step = continueRequested && auth.signedIn && recipientComplete ? 3 : 2;
   const showSummary = step === 3 && finished;
 
@@ -71,7 +71,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!recipientComplete) {
-      setError(needsQr ? "Carga el QR y completa el nombre y el motivo para continuar." : "Completa el nombre y el motivo para continuar.");
+      setError("Completa el nombre y el motivo para continuar.");
       return;
     }
     if (auth.busy || auth.loading || !auth.available) return;
@@ -89,18 +89,19 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     <h2 id="remittance-title" ref={title} tabIndex={-1} className="mb-6 text-center text-xl font-semibold">{showSummary ? "Resumen de la demostración" : step === 2 ? "Motivo de envío" : "Cargar y finalizar"}</h2>
     <Stepper step={step} onAmount={onClose} onRecipient={back} />
     {step === 2 ? <form onSubmit={submit} className="mt-12" aria-describedby={error ? "recipient-error" : undefined}>
-      {needsQr && <div className="mx-auto flex min-h-36 w-full max-w-[372px] flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-content-tertiary bg-background p-4">
-        <label htmlFor="recipient-qr" className="text-sm text-content-secondary">QR del destinatario</label>
+      {showQrUpload && <div className="mx-auto flex min-h-36 w-full max-w-[372px] flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-content-tertiary bg-background p-4">
+        <label htmlFor="recipient-qr" className="text-sm text-content-secondary">QR del destinatario (opcional)</label>
+        <p id="recipient-qr-help" className="text-center text-xs text-content-secondary">Puedes continuar sin cargar una imagen.</p>
         {preview && <>
           {/* The preview is an in-memory blob, not a remote or optimized image. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={preview} alt="Imagen seleccionada del QR del destinatario" width={96} height={96} className="size-24 object-contain" />
         </>}
-        <input ref={upload} id="recipient-qr" type="file" accept="image/png,image/jpeg,image/webp" onChange={selectQr} disabled={auth.busy} className="sr-only" tabIndex={-1} />
+        <input ref={upload} id="recipient-qr" type="file" aria-describedby="recipient-qr-help" accept="image/png,image/jpeg,image/webp" onChange={selectQr} disabled={auth.busy} className="sr-only" tabIndex={-1} />
         <button type="button" disabled={auth.busy} onClick={() => upload.current?.click()} className="rounded-full bg-field px-4 py-2 text-sm font-medium disabled:opacity-50">{file ? "Cambiar imagen" : "Cargar"}</button>
         {file && <span className="max-w-full truncate text-xs text-content-secondary">{file.name}</span>}
       </div>}
-      {!needsQr && <p className="rounded-lg bg-field p-4 text-sm leading-6">Entrega en efectivo: completa el nombre del destinatario y el motivo. La disponibilidad de puntos de retiro está pendiente.</p>}
+      {!showQrUpload && <p className="rounded-lg bg-field p-4 text-sm leading-6">Entrega en efectivo: completa el nombre del destinatario y el motivo. La disponibilidad de puntos de retiro está pendiente.</p>}
       <div className="mt-10 flex flex-col gap-4">
         <label className="flex flex-col gap-2 text-base font-medium" htmlFor="recipient-name">Nombre completo
           <input id="recipient-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej. Carlos Torres Ramírez" required disabled={auth.busy} maxLength={120} autoComplete="off" className="remittance-field" />
@@ -120,7 +121,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
       </button>
       {auth.busy ? <button type="button" onClick={() => { auth.cancel(); setContinueRequested(false); }} className="mx-auto mt-3 block text-sm text-bolar-green underline">Cancelar inicio de sesión</button>
         : !auth.signedIn && <p className="mt-3 text-center text-xs text-content-secondary">Al continuar, inicia sesión con Google para seguir.</p>}
-      <p className="mt-4 text-center text-xs leading-5 text-content-secondary">{needsQr ? "Demostración. La imagen queda en tu navegador; aún no validamos los datos del QR." : "Demostración. No se ha reservado una entrega en efectivo."}</p>
+      <p className="mt-4 text-center text-xs leading-5 text-content-secondary">{showQrUpload ? "Demostración. Si adjuntas una imagen, queda en tu navegador; aún no validamos los datos del QR." : "Demostración. No se ha reservado una entrega en efectivo."}</p>
     </form> : showSummary ? <div className="mt-10">
       <h3 className="text-center text-2xl font-semibold">Demostración finalizada</h3>
       <dl className="my-6 grid grid-cols-[1fr_1fr] gap-3 rounded-xl bg-field p-5 text-sm">

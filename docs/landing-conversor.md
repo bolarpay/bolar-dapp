@@ -6,7 +6,7 @@ La calculadora está disponible antes de iniciar sesión. El usuario elige impor
 
 Se reutiliza el proveedor compartido de Pollar. El estado observado por React es el paso primitivo de autenticación, para conservar snapshots estables y evitar el bucle de renders que ocurría al observar objetos nuevos. Si Google no está habilitado o falla la configuración, se informa y se impide avanzar; no se simula una sesión exitosa.
 
-Los métodos de pago son Pix/Efectivo y los de entrega QR/Efectivo. Las selecciones se conservan hasta el resumen. Entrega en efectivo no solicita una imagen QR; pago en efectivo no muestra un QR Pix. Esta selección todavía pertenece al recorrido demostrativo: no implementa sucursales, reservas, cobros ni desembolsos en efectivo.
+Los métodos de pago son Pix/Efectivo y los de entrega QR/Efectivo. Las selecciones se conservan hasta el resumen. En el paso Motivo de envío, el QR del destinatario es opcional: basta completar nombre y motivo para continuar. Si se adjunta una imagen, se conserva la validación de formato y tamaño. Entrega en efectivo no solicita una imagen QR; pago en efectivo no muestra un QR Pix. Esta selección todavía pertenece al recorrido demostrativo: no implementa sucursales, reservas, cobros ni desembolsos en efectivo.
 
 ## Tipo de cambio
 
@@ -37,7 +37,7 @@ Hasta tener un número válido, el botón aparece deshabilitado. El enlace abre 
 2. Sin sesión: comprobar que la calculadora se muestra, carga una referencia con fecha y convierte al editar cualquiera de los importes.
 3. Simular fallo de la petición de cambio: debe mostrar error y reintento sin inventar una tasa ni permitir continuar con ella.
 4. Seleccionar Efectivo en ambos métodos, iniciar sesión con Gmail y comprobar que abre Motivo de envío sin solicitar QR. Revisar selecciones e importes en el resumen.
-5. Probar Pix/QR y las combinaciones mixtas. Cancelar el acceso, probar un error y volver a intentar.
+5. Probar Pix/QR y las combinaciones mixtas. En Motivo de envío, comprobar que nombre y motivo permiten avanzar sin adjuntar QR y que ambos campos siguen siendo obligatorios. Repetir con una imagen válida y con una inválida. Cancelar el acceso, probar un error y volver a intentar.
 6. Revisar escritorio, móvil, navegación con teclado y el destino del enlace WhatsApp. No es necesario enviar un mensaje para comprobar el enlace.
 
 Rama preparada: `codex/landing-remittance-improvements`. El push requiere la confirmación de Jerson. No se modificó la lógica de ejecución de pagos del MVP.
