@@ -2,7 +2,7 @@ import { Asset } from "./asset";
 import { InfoButton } from "./info-button";
 
 const pendingMessage = "Esta sección todavía contiene los datos de ejemplo del diseño de Figma. El equipo de Bolar está preparando el contenido y los canales oficiales.";
-const linkClass = "trim-cap text-left text-sm leading-[1.4] tracking-[0.4px] opacity-80 hover:underline";
+const linkClass = "trim-cap text-left text-sm leading-[1.4] tracking-[0.4px] opacity-80 transition-colors enabled:hover:text-bolar-dark enabled:hover:opacity-100 hover:underline";
 
 export function LandingFooter() {
   return (
@@ -13,7 +13,7 @@ export function LandingFooter() {
           <Asset name="footer-logo" width={196} height={32.346} alt="Routeflow — marca de ejemplo del diseño" />
           <p className="trim-cap text-sm leading-[1.4] tracking-[0.4px]">8 W. South St.Buford, GA 30518<br />5Briarwood LaneVienna, VA 22180 RER</p>
           <div className="flex gap-8">
-            {(["youtube", "facebook", "whatsapp"] as const).map((name) => <InfoButton key={name} label={`${name}: canal pendiente`} title="Canales de Bolar" message={pendingMessage} className="rounded-md hover:opacity-70"><Asset name={name} width={32} height={32} /></InfoButton>)}
+            {(["youtube", "facebook", "whatsapp"] as const).map((name) => <InfoButton key={name} label={`${name}: canal pendiente`} title="Canales de Bolar" message={pendingMessage} className="bolar-social-button rounded-md transition-colors"><Asset name={name} width={32} height={32} /></InfoButton>)}
           </div>
         </div>
         <div className="flex flex-col items-start gap-4">
