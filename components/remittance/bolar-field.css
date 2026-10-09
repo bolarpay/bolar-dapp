@@ -1,0 +1,21 @@
+.bolar-ramp-payment-field {
+    flex-direction: column;
+    display: flex;
+    gap: 0.375rem;
+}
+
+.bolar-ramp-payment-label {
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+
+.bolar-ramp-payment-value {
+    background-color: #f9fafb;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid e5e7eb;
+    padding: 0.75rem 1rem;
+    column-gap: 30px;
+}
