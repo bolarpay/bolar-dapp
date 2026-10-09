@@ -127,8 +127,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     }, 2400);
   }
 
-  async function requestOnRamp(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function requestOnRamp() {
     setContinueRequested(false);
     console.log("OnRampRequested");
     console.log("Get Ramps Quote");
@@ -154,7 +153,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     console.log(onramp);
     setBridgeTermUrl(onramp.tosUrl ? onramp.tosUrl : '');
     setBridgeKYC(onramp.kycUrl ? onramp.kycUrl : '');
-    submit(event);
+    setContinueRequested(true);
     console.log("Poll Ramp Transaction");
     
     setInterval(async () => {
