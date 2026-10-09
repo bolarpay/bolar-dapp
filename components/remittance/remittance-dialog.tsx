@@ -18,7 +18,7 @@ export function RemittanceDialog({ children, onClose }: { children: ReactNode; o
 
   return (
     <dialog ref={dialog} className="remittance-dialog" aria-labelledby="remittance-title" onCancel={(event) => { event.preventDefault(); onClose(); }}>
-      <button type="button" aria-label="Cerrar envío" onClick={onClose} className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full text-xl text-content-secondary hover:bg-field">×</button>
+      <button type="button" aria-label="Cerrar envío" onClick={onClose} className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full text-xl text-content-secondary transition-colors hover:bg-bolar-dark hover:text-white">×</button>
       {children}
     </dialog>
   );

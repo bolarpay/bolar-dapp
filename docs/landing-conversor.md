@@ -6,7 +6,7 @@ La calculadora está disponible antes de iniciar sesión. El usuario elige impor
 
 Se reutiliza el proveedor compartido de Pollar. El estado observado por React es el paso primitivo de autenticación, para conservar snapshots estables y evitar el bucle de renders que ocurría al observar objetos nuevos. Si Google no está habilitado o falla la configuración, se informa y se impide avanzar; no se simula una sesión exitosa.
 
-Los métodos de pago son Pix/Efectivo y los de entrega QR/Efectivo. Las selecciones se conservan hasta el resumen. En el paso Motivo de envío, el QR del destinatario es opcional: basta completar nombre y motivo para continuar. Si se adjunta una imagen, se conserva la validación de formato y tamaño. Entrega en efectivo no solicita una imagen QR; pago en efectivo no muestra un QR Pix. Esta selección todavía pertenece al recorrido demostrativo: no implementa sucursales, reservas, cobros ni desembolsos en efectivo.
+Los métodos de pago son Pix/Efectivo y los de entrega QR/Efectivo. Las selecciones se conservan hasta el resumen. En el paso Motivo de envío, el QR del destinatario es opcional: se requieren nombre, CI, motivo y banco para continuar con entrega por QR. Si se adjunta una imagen, se conserva la validación de formato y tamaño. Entrega en efectivo requiere nombre, CI y motivo, sin banco ni imagen QR; pago en efectivo no muestra un QR Pix. Esta selección todavía pertenece al recorrido demostrativo: no implementa sucursales, reservas, cobros ni desembolsos en efectivo.
 
 ## Tipo de cambio
 
@@ -37,7 +37,22 @@ Hasta tener un número válido, el botón aparece deshabilitado. El enlace abre 
 2. Sin sesión: comprobar que la calculadora se muestra, carga una referencia con fecha y convierte al editar cualquiera de los importes.
 3. Simular fallo de la petición de cambio: debe mostrar error y reintento sin inventar una tasa ni permitir continuar con ella.
 4. Seleccionar Efectivo en ambos métodos, iniciar sesión con Gmail y comprobar que abre Motivo de envío sin solicitar QR. Revisar selecciones e importes en el resumen.
-5. Probar Pix/QR y las combinaciones mixtas. En Motivo de envío, comprobar que nombre y motivo permiten avanzar sin adjuntar QR y que ambos campos siguen siendo obligatorios. Repetir con una imagen válida y con una inválida. Cancelar el acceso, probar un error y volver a intentar.
+5. Probar Pix/QR y las combinaciones mixtas. En Motivo de envío, comprobar que nombre, CI, motivo y banco permiten avanzar sin adjuntar QR y que esos campos siguen siendo obligatorios. Repetir con una imagen válida y con una inválida. Cancelar el acceso, probar un error y volver a intentar.
 6. Revisar escritorio, móvil, navegación con teclado y el destino del enlace WhatsApp. No es necesario enviar un mensaje para comprobar el enlace.
 
 Rama preparada: `codex/landing-remittance-improvements`. El push requiere la confirmación de Jerson. No se modificó la lógica de ejecución de pagos del MVP.
+
+
+## Ajustes de formulario y animaciones (8 de octubre de 2026)
+
+Cambios locales en `codex/remittance-form-improvements`:
+
+- Flechas verticales en los selectores Pix/QR y hover de botones en `#011E24`, el color de las letras del logo.
+- Transición de 800 ms después de confirmar la sesión, antes de mostrar el paso 2. El acceso de Google conserva su duración real y no se omite su verificación. Cerrar la ventana cancela el temporizador.
+- Ocho motivos de envío y trece bancos definidos en el componente `remittance-steps.tsx`. CI del destinatario requerido como texto, para admitir complementos; esta validación solo comprueba presencia, no identidad ni KYC. Banco obligatorio para entrega por QR, oculto para efectivo. El QR sigue siendo opcional.
+- CI y banco se mantienen en memoria durante el formulario y se muestran en el resumen. No se envían a proveedores ni se guardan en almacenamiento del navegador.
+- Loader adaptado del archivo `BOLAR-loader.html` del equipo, con su vector y animaciones CSS. En «Verificar y finalizar» se muestra un ciclo de 2,4 segundos antes del resumen demostrativo. Respeta movimiento reducido y no afirma que el dinero esté en camino. No hay nueva consulta bancaria ni verificación de depósitos.
+
+Revisión manual de estos ajustes: avanzar con sesión y mediante Google, cerrar durante la transición y reabrir, comprobar los campos obligatorios sin QR, regresar al paso 2 conservando los datos, probar entrega en efectivo y finalizar la demostración. Revisar el modal con teclado y en móvil.
+
+Verificación de esta etapa: ESLint, TypeScript y las siete pruebas existentes aprobadas. En navegador local se comprobó una vista temporal de los componentes con datos ficticios: transición antes del paso 2, validación de nombre vacío, avance sin QR con los nuevos campos, conservación de datos al regresar, animación final y resumen con CI/banco. También se comprobó efectivo sin banco/QR y el formulario a 390 px sin desbordamiento horizontal. La vista temporal se retiró. Estas pruebas no validan el login real de Google, KYC ni una remesa; el acceso real y la integración con proveedores siguen fuera de esta comprobación.

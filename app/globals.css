@@ -12,7 +12,7 @@
   --font-sans: var(--font-inter);
   --font-footer: var(--font-open-sans);
   --color-bolar-green: #004d1a;
-  --color-bolar-dark: #000c06;
+  --color-bolar-dark: #011e24;
   --color-content-secondary: #475659;
   --color-content-tertiary: #95a3a6;
   --color-field: #edf2ef;
@@ -34,8 +34,8 @@ body {
 }
 
 @layer components {
-  .nav-link { @apply flex items-center justify-center rounded-lg px-4 py-[14px] text-base font-medium leading-5 transition-colors hover:bg-field; }
-  .primary-button { @apply rounded-lg bg-bolar-green px-5 py-4 text-center text-lg font-medium leading-6 text-field transition-colors hover:bg-bolar-dark; }
+  .nav-link { @apply flex items-center justify-center rounded-lg px-4 py-[14px] text-base font-medium leading-5 transition-colors hover:bg-bolar-dark hover:text-white; }
+  .primary-button { @apply rounded-lg bg-bolar-green px-5 py-4 text-center text-lg font-medium leading-6 text-field transition-colors enabled:hover:bg-bolar-dark; }
   .bolar-dialog { @apply fixed inset-0 m-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] max-w-[460px] overflow-y-auto rounded-2xl border border-field bg-white p-6 font-sans text-foreground shadow-xl; }
   .bolar-dialog::backdrop { background: rgb(0 12 6 / 45%); }
 }
