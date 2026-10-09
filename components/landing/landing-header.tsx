@@ -20,7 +20,7 @@ export function LandingHeader() {
         <span className="hidden pl-2 text-center text-base leading-5 tracking-[2px] min-[84.375rem]:block">REMESAS INTERNACIONALES</span>
       </a>
       <nav aria-label="Navegación principal" className="hidden items-center gap-2 lg:flex"><Navigation /></nav>
-      <HeaderWallet />
+      <button type="submit" form="calcular-envio" className="flex h-12 items-center justify-center rounded-lg bg-bolar-dark px-6 text-lg font-medium leading-6 text-background transition-colors hover:bg-bolar-green sm:w-[192px]">Enviar dinero</button>
       <details className="w-full lg:hidden">
         <summary className="bolar-hover-surface cursor-pointer rounded-lg px-4 py-2 text-sm font-medium">Menú</summary>
         <nav aria-label="Navegación móvil" className="mt-2 flex flex-wrap gap-1"><Navigation /></nav>

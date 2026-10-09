@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "r
 import { BolarLoader } from "./bolar-loader";
 import { Spinner } from "./spinner";
 import { QrImage } from "./qr-image";
+import { Asset } from "../landing/asset";
 
 import type { RemittanceAuth } from "./use-remittance-auth";
 import { PollarClient } from "@pollar/core";
@@ -62,6 +63,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
   const [qrPix, setQrPix] = useState("");
   const [qrDetail, setQrDetail] = useState("");
   const [transactionStatus, setTransactionStatus] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
   const selection = useRef(0);
   const showQrUpload = deliveryMethod === "qr";
   const recipientComplete = Boolean(name.trim() && identity.trim() && reasons.includes(reason) && (!showQrUpload || banks.includes(bank)));
@@ -107,6 +109,8 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     }
     if (auth.busy || auth.loading || !auth.available) return;
     setError("");
+    if(step == 2)
+      requestOnRamp();
     setContinueRequested(true);
     if (!auth.signedIn) {
       try { auth.signIn(); }
@@ -128,7 +132,6 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
   }
 
   async function requestOnRamp() {
-    setContinueRequested(false);
     console.log("OnRampRequested");
     console.log("Get Ramps Quote");
     let amountToSend = parseFloat(send);
@@ -153,7 +156,6 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     console.log(onramp);
     setBridgeTermUrl(onramp.tosUrl ? onramp.tosUrl : '');
     setBridgeKYC(onramp.kycUrl ? onramp.kycUrl : '');
-    setContinueRequested(true);
     console.log("Poll Ramp Transaction");
     
     setInterval(async () => {
@@ -183,7 +185,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     const finalStatus = await pollar.pollRampTransaction(onramp.txId, {
       intervalMs: 3000,
       timeoutMs: 1200000,
-    })
+    });
   }
 
   function acceptBridgeTerms() {
@@ -224,17 +226,20 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
             {reasons.map(option => <option key={option} value={option}>{option}</option>)}
           </select>
         </label>
-        {showQrUpload && <label className="flex flex-col gap-2 text-base font-medium" htmlFor="recipient-bank">¿En qué banco quieres recibir el dinero?
+        {showQrUpload && <> <label className="flex flex-col gap-2 text-base font-medium" htmlFor="recipient-bank">¿En qué banco quieres recibir el dinero?
           <select id="recipient-bank" value={bank} onChange={(event) => setBank(event.target.value)} required disabled={auth.busy} className="remittance-field">
             <option value="" disabled>Selecciona la entidad bancaria</option>
             {banks.map(option => <option key={option} value={option}>{option}</option>)}
           </select>
-        </label>}
+        </label>
+        <label className="flex flex-col gap-2 text-base font-medium" htmlFor="recipient-account">Cuenta del destinatario
+          <input id="recipient-account" value={bankAccountNumber} onChange={(event) => setBankAccountNumber(event.target.value)} placeholder="Número de cuenta del destinatario" required disabled={auth.busy} maxLength={30} autoComplete="off" className="remittance-field" />
+        </label> </> }
       </div>
       {error && <p id="recipient-error" role="alert" className="mt-4 text-sm text-red-700">{error}</p>}
       {auth.error && <p role="alert" className="mt-4 text-sm text-red-700">{auth.error}</p>}
       {auth.retry && <button type="button" onClick={auth.retry} className="mt-3 text-sm bolar-text-action text-bolar-green underline">Reintentar conexión</button>}
-      <button type="button" onClick={requestOnRamp} disabled={auth.busy || auth.loading || !auth.available} className="primary-button mx-auto mt-10 block w-full max-w-[344px] disabled:cursor-not-allowed disabled:opacity-50">
+      <button type="submit" disabled={auth.busy || auth.loading || !auth.available} className="primary-button mx-auto mt-10 block w-full max-w-[344px] disabled:cursor-not-allowed disabled:opacity-50">
         {auth.busy ? "Verificando tu sesión…" : auth.loading ? "Preparando acceso…" : "Continuar"}
       </button>
       {auth.busy ? <button type="button" onClick={() => { auth.cancel(); setContinueRequested(false); }} className="mx-auto mt-3 block text-sm bolar-text-action text-bolar-green underline">Cancelar inicio de sesión</button>
@@ -269,13 +274,16 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
           <Spinner/>
         </div>
       </div>
-      {qrAvailable && <div>
+      {qrAvailable ? <div>
         <QrImage name="pix" svg={qrPix} width={184} height={184} alt="qr bridge"/>
         <p className="mt-3 text-sm font-semibold leading-5">{qrDetail}</p>
+      </div>
+      : <div>
+        <Asset name="qr" width={184} height={184} alt="QR de demostración. No sirve para realizar pagos." />
       </div>}
       <button type="button" onClick={acceptBridgeTerms} className="primary-button mt-12 w-full max-w-[344px]">Aceptar los términos en Bridge</button>
       <button type="button" onClick={continueAtBridge} className="primary-button mt-12 w-full max-w-[344px]">Continua en Bridge</button>
-      {/* <button type="button" onClick={finish} className="primary-button mt-12 w-full max-w-[344px]">Verificar y finalizar</button> */}
+      <button type="button" onClick={finish} className="primary-button mt-12 w-full max-w-[344px]">Simular pago</button>
       {/*<p className="mt-4 text-xs leading-5 text-content-secondary">{paymentMethod === "pix" ? "QR de ejemplo, sin valor de pago. La verificación de depósitos estará disponible al integrar el proveedor." : "No se ha registrado ningún pago en efectivo."}</p>*/}
     </div>}
   </>;
