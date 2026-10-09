@@ -11,5 +11,45 @@
   font-family: var(--font-inter), Arial, sans-serif;
 }
 
-.pollar-modal .pollar-social-btn:hover { border-color: #004d1a; }
 .pollar-modal :focus-visible { outline: 2px solid #004d1a; outline-offset: 3px; }
+
+/* WalletButton sets its background and menu text inline. These two scoped
+   overrides are necessary to keep the BOLAR hover above dashboard colors. */
+@media (hover: hover) {
+  :is(.pollar-wallet-login-btn, .pollar-wallet-btn):enabled:hover {
+    background-color: var(--color-bolar-dark) !important;
+    color: white;
+    opacity: 1;
+  }
+
+  .pollar-wallet-dropdown-item:not(.pollar-danger):enabled:hover {
+    background-color: var(--color-bolar-dark);
+    color: white !important;
+  }
+
+  :is(
+    .pollar-close-btn, .pollar-back-btn, .pollar-modal-close,
+    .pollar-btn-primary, .pollar-btn-secondary, .pollar-copy-btn,
+    .pollar-asset-add-custom, .pollar-kyc-provider-btn,
+    .pollar-github-button, .pollar-gsi-material-button, .pollar-social-btn,
+    .pollar-wallet-list-btn, .pollar-wallet-entry-btn,
+    .pollar-ramp-copy-btn, .pollar-receive-copy-btn,
+    .pollar-tx-result-btn, .pollar-hist-page-btn
+  ):not(:disabled):hover {
+    background-color: var(--color-bolar-dark);
+    border-color: var(--color-bolar-dark);
+    color: white;
+    opacity: 1;
+    --pollar-btn-primary-fg: white;
+    --pollar-btn-secondary-fg: white;
+    box-shadow: 0 2px 8px rgb(1 30 36 / 12%);
+  }
+
+  :is(.pollar-status-cancel, .pollar-tx-xdr-toggle, .pollar-hist-item-explorer):not(:disabled):hover {
+    color: var(--color-bolar-dark);
+  }
+
+  .pollar-ramp-route-card:not([data-disabled]):hover {
+    border-color: var(--color-bolar-dark);
+  }
+}

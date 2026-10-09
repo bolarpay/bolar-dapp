@@ -153,11 +153,11 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
       </div>
       {error && <p id="recipient-error" role="alert" className="mt-4 text-sm text-red-700">{error}</p>}
       {auth.error && <p role="alert" className="mt-4 text-sm text-red-700">{auth.error}</p>}
-      {auth.retry && <button type="button" onClick={auth.retry} className="mt-3 text-sm text-bolar-green underline">Reintentar conexión</button>}
+      {auth.retry && <button type="button" onClick={auth.retry} className="mt-3 text-sm bolar-text-action text-bolar-green underline">Reintentar conexión</button>}
       <button type="submit" disabled={auth.busy || auth.loading || !auth.available} className="primary-button mx-auto mt-10 block w-full max-w-[344px] disabled:cursor-not-allowed disabled:opacity-50">
         {auth.busy ? "Verificando tu sesión…" : auth.loading ? "Preparando acceso…" : "Continuar"}
       </button>
-      {auth.busy ? <button type="button" onClick={() => { auth.cancel(); setContinueRequested(false); }} className="mx-auto mt-3 block text-sm text-bolar-green underline">Cancelar inicio de sesión</button>
+      {auth.busy ? <button type="button" onClick={() => { auth.cancel(); setContinueRequested(false); }} className="mx-auto mt-3 block text-sm bolar-text-action text-bolar-green underline">Cancelar inicio de sesión</button>
         : !auth.signedIn && <p className="mt-3 text-center text-xs text-content-secondary">Al continuar, inicia sesión con Google para seguir.</p>}
       <p className="mt-4 text-center text-xs leading-5 text-content-secondary">{showQrUpload ? "Demostración. Si adjuntas una imagen, queda en tu navegador; aún no validamos los datos del QR." : "Demostración. No se ha reservado una entrega en efectivo."}</p>
     </form> : finalizing ? <div className="py-12" aria-busy="true">

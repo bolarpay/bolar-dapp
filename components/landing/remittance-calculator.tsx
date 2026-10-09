@@ -52,7 +52,7 @@ function MethodField({ label, value, id, onChange, disabled }: { label: string; 
 function CustomerSupport() {
   const url = whatsappSupportUrl(process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER);
   const content = <><Asset name="whatsapp" width={20} height={20} /><span>WhatsApp</span></>;
-  const style = "flex items-center justify-center gap-2 rounded-full border border-bolar-green px-3 py-2 text-sm font-semibold text-bolar-green transition-colors hover:border-bolar-dark hover:bg-bolar-dark hover:text-white";
+  const style = "flex items-center justify-center gap-2 rounded-full border border-bolar-green px-3 py-2 text-sm font-semibold text-bolar-green transition-colors [&:not(:disabled)]:hover:border-bolar-dark [&:not(:disabled)]:hover:bg-bolar-dark [&:not(:disabled)]:hover:text-white";
   return <div className="mx-4 border-t border-field pt-4">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <span className="text-sm font-medium">Atención al cliente</span>
@@ -122,7 +122,7 @@ export function RemittanceCalculator({ auth = unavailableAuth }: { auth?: Remitt
         </> : <p>{rateLoading ? "Consultando tipo de cambio…" : rateError}</p>}
         <p>Tipo de cambio de referencia, sin comisiones. El monto final puede variar.</p>
         <a href="https://www.exchangerate-api.com" target="_blank" rel="noreferrer" className="underline underline-offset-2">Rates By Exchange Rate API</a>
-        {rateError && <button type="button" disabled={rateLoading} onClick={() => { setRateLoading(true); setReload(value => value + 1); }} className="ml-3 font-medium text-bolar-green underline disabled:opacity-50">Reintentar</button>}
+        {rateError && <button type="button" disabled={rateLoading} onClick={() => { setRateLoading(true); setReload(value => value + 1); }} className="ml-3 font-medium bolar-text-action text-bolar-green underline disabled:opacity-50">Reintentar</button>}
       </div>
       <MethodField label="Método de pago" value={paymentMethod} id="payment-method" disabled={blocked} onChange={value => setPaymentMethod(value as "pix" | "cash")} />
       <MethodField label="Método de entrega" value={deliveryMethod} id="delivery-method" disabled={blocked} onChange={value => setDeliveryMethod(value as "qr" | "cash")} />
@@ -131,9 +131,9 @@ export function RemittanceCalculator({ auth = unavailableAuth }: { auth?: Remitt
         {auth.busy ? <BolarLoader compact label="Verificando tu sesión" /> : auth.loading ? "Preparando acceso…" : auth.signedIn ? "Continuar" : "Continuar con Gmail"}
       </button>
       {!auth.signedIn && <p className="px-4 text-center text-xs text-content-secondary">Inicia sesión con tu cuenta de Google para continuar.</p>}
-      {auth.busy && <button type="button" onClick={() => { auth.cancel(); setRequested(null); }} className="text-sm text-bolar-green underline">Cancelar inicio de sesión</button>}
+      {auth.busy && <button type="button" onClick={() => { auth.cancel(); setRequested(null); }} className="text-sm bolar-text-action text-bolar-green underline">Cancelar inicio de sesión</button>}
       {auth.error && <p role="alert" className="px-4 text-sm text-red-700">{auth.error}</p>}
-      {auth.retry && <button type="button" onClick={auth.retry} className="text-sm text-bolar-green underline">Reintentar acceso</button>}
+      {auth.retry && <button type="button" onClick={auth.retry} className="text-sm bolar-text-action text-bolar-green underline">Reintentar acceso</button>}
       {error && <p id="quote-error" role="alert" className="px-4 text-sm text-red-700">{error}</p>}
       <CustomerSupport />
     </form>

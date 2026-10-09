@@ -22,7 +22,7 @@ export function LandingHeader() {
       <nav aria-label="Navegación principal" className="hidden items-center gap-2 lg:flex"><Navigation /></nav>
       <HeaderWallet />
       <details className="w-full lg:hidden">
-        <summary className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium">Menú</summary>
+        <summary className="bolar-hover-surface cursor-pointer rounded-lg px-4 py-2 text-sm font-medium">Menú</summary>
         <nav aria-label="Navegación móvil" className="mt-2 flex flex-wrap gap-1"><Navigation /></nav>
       </details>
     </header>

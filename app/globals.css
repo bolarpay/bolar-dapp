@@ -35,6 +35,8 @@ body {
 
 @layer components {
   .nav-link { @apply flex items-center justify-center rounded-lg px-4 py-[14px] text-base font-medium leading-5 transition-colors hover:bg-bolar-dark hover:text-white; }
+  .bolar-text-action { @apply transition-colors enabled:hover:text-bolar-dark; }
+  .bolar-hover-surface { @apply transition-colors hover:bg-bolar-dark hover:text-white; }
   .primary-button { @apply rounded-lg bg-bolar-green px-5 py-4 text-center text-lg font-medium leading-6 text-field transition-colors enabled:hover:bg-bolar-dark; }
   .bolar-dialog { @apply fixed inset-0 m-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] max-w-[460px] overflow-y-auto rounded-2xl border border-field bg-white p-6 font-sans text-foreground shadow-xl; }
   .bolar-dialog::backdrop { background: rgb(0 12 6 / 45%); }
@@ -87,4 +89,11 @@ body {
 @media (max-width: 440px) {
   .remittance-dialog { padding: 40px 20px 24px; }
   .remittance-step-label { font-size: 11px; line-height: 16px; }
+}
+
+@media (hover: hover) {
+  button.remittance-step-label:enabled:hover { color: var(--color-bolar-dark); }
+  button.remittance-step-label:enabled:hover .remittance-step-dot { background: var(--color-bolar-dark); color: white; }
+  .bolar-social-button:enabled:hover { background: var(--color-bolar-dark); }
+  .bolar-social-button:enabled:hover img { filter: brightness(0) invert(1); }
 }

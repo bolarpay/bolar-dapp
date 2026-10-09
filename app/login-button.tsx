@@ -21,12 +21,12 @@ export function LoginButton() {
           </div>
         </div>
         {wallet?.address && <p className="mt-4 break-all font-mono text-xs leading-5 text-content-secondary">{wallet.address}</p>}
-        <button type="button" onClick={() => logout()} className="mt-5 text-sm font-semibold text-bolar-green underline underline-offset-4">Cerrar sesión</button>
+        <button type="button" onClick={() => logout()} className="mt-5 text-sm font-semibold bolar-text-action text-bolar-green underline underline-offset-4">Cerrar sesión</button>
       </div>
     );
   }
   if (isAuthenticated && !verified) {
-    return <div><p role="status" className="text-sm text-content-secondary">Verificando tu sesión…</p><button type="button" className="mt-4 text-sm text-bolar-green underline" onClick={() => logout()}>Volver a iniciar sesión</button></div>;
+    return <div><p role="status" className="text-sm text-content-secondary">Verificando tu sesión…</p><button type="button" className="mt-4 text-sm bolar-text-action text-bolar-green underline" onClick={() => logout()}>Volver a iniciar sesión</button></div>;
   }
   return (
     <button type="button" disabled={configStatus !== "ready"} className="primary-button w-full disabled:cursor-wait disabled:opacity-60" onClick={openLoginModal}>

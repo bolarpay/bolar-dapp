@@ -56,3 +56,10 @@ Cambios locales en `codex/remittance-form-improvements`:
 Revisión manual de estos ajustes: avanzar con sesión y mediante Google, cerrar durante la transición y reabrir, comprobar los campos obligatorios sin QR, regresar al paso 2 conservando los datos, probar entrega en efectivo y finalizar la demostración. Revisar el modal con teclado y en móvil.
 
 Verificación de esta etapa: ESLint, TypeScript y las siete pruebas existentes aprobadas. En navegador local se comprobó una vista temporal de los componentes con datos ficticios: transición antes del paso 2, validación de nombre vacío, avance sin QR con los nuevos campos, conservación de datos al regresar, animación final y resumen con CI/banco. También se comprobó efectivo sin banco/QR y el formulario a 390 px sin desbordamiento horizontal. La vista temporal se retiró. Estas pruebas no validan el login real de Google, KYC ni una remesa; el acceso real y la integración con proveedores siguen fuera de esta comprobación.
+
+
+### Revisión de hover (9 de octubre de 2026)
+
+Se conserva `--color-bolar-dark: #011E24`, tomado de las letras del SVG BOLAR (el avión usa otro verde, `#00C544`). Los botones principales ya lo utilizaban. Se completó el hover de Pollar —acceso, wallet, menú y controles de ventanas—, menú móvil, navegación del formulario, acciones de texto y botones del pie. Los controles deshabilitados conservan su estado; las acciones de peligro de Pollar conservan su señalización roja. Los estilos se aplican en la app sin modificar el paquete instalado. Solo se usa `!important` para superar los colores inline que Pollar asigna a su botón de wallet y al texto de su menú.
+
+Verificación de hover: ESLint, TypeScript y diff sin errores. En navegador local se comprobó el hover real de «Login with Pollar», Google y Wallet: fondo `rgb(1, 30, 36)` y texto blanco. No se inició sesión ni se ejecutó ninguna operación de wallet. Los demás controles de Pollar se revisaron por sus selectores en la versión instalada; no se recorrieron todas las ventanas autenticadas. Cambios locales, pendientes de commit y push.
