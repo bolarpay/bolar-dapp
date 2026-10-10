@@ -36,7 +36,6 @@ export function PaymentInstructions({ send, paymentMethod, transactionStatus, qr
           <p className="mt-3 max-w-full break-all text-sm leading-5">{qrDetail}</p>
         </> : <>
           <Image src="/assets/landing/pix-payment-50-brl.jpeg" width={586} height={584} loading="eager" unoptimized alt="QR PIX proporcionado por el equipo BOLAR para 50 BRL" className="h-auto w-60 max-w-full" />
-          <p className="mt-3 text-xs text-content-secondary">QR fijo proporcionado por el equipo para 50 BRL; no corresponde a una nueva operación de Bridge.</p>
         </>}
       </div>
       <div className="mt-6 flex w-full max-w-[344px] flex-col gap-3">
@@ -45,6 +44,5 @@ export function PaymentInstructions({ send, paymentMethod, transactionStatus, qr
       </div>
     </> : <p className="mt-6 rounded-xl bg-field p-5 text-sm leading-6">Pago en efectivo seleccionado. Los puntos de cobro todavía no están disponibles; esta demostración no acepta dinero.</p>}
     <button type="button" onClick={onSend} className="primary-button mt-6 w-full max-w-[344px]">Enviar dinero</button>
-    <p className="mt-3 max-w-[344px] text-xs leading-5 text-content-secondary">Este botón muestra el resumen de la demostración; no confirma ni ejecuta el pago.</p>
   </div>;
 }
