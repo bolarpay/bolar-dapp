@@ -2,13 +2,10 @@
 
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { BolarLoader } from "./bolar-loader";
-import { Spinner } from "./spinner";
-import { QrImage } from "./qr-image";
-import { Asset } from "../landing/asset";
+import { PaymentInstructions } from "./payment-instructions";
 
 import type { RemittanceAuth } from "./use-remittance-auth";
 import { PollarClient } from "@pollar/core";
-import "./bolar-field.css";
 
 const pollar = new PollarClient({
   apiKey: process.env.NEXT_PUBLIC_POLLAR_PUBLISHABLE_KEY ?? "",
@@ -134,8 +131,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
   async function requestOnRamp() {
     console.log("OnRampRequested");
     console.log("Get Ramps Quote");
-    let amountToSend = parseFloat(send);
-    let amountToReceive = parseFloat(receive); 
+    const amountToSend = parseFloat(send);
     const quotes = await pollar.getRampsQuote({
       direction: 'onramp',
       currency: 'BRL',
@@ -159,14 +155,14 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
     console.log("Poll Ramp Transaction");
     
     setInterval(async () => {
-      let tx = await pollar.getRampTransaction(onramp.txId);
-      let status = tx.status;
+      const tx = await pollar.getRampTransaction(onramp.txId);
+      const status = tx.status;
       setTransactionStatus(status);
       console.log("Transaction Status");
       console.log(status);
       if(status === "processing") {
-        let svg = tx.depositInstructions?.scannable?.image?.data;
-        let qrPayload = tx.depositInstructions?.scannable?.payload;
+        const svg = tx.depositInstructions?.scannable?.image?.data;
+        const qrPayload = tx.depositInstructions?.scannable?.payload;
         setQrPix(svg ? svg : "");
         setQrDetail(qrPayload ? qrPayload : "");
         setQrAvailable(true);
@@ -182,7 +178,7 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
       }
     },4000);
 
-    const finalStatus = await pollar.pollRampTransaction(onramp.txId, {
+    await pollar.pollRampTransaction(onramp.txId, {
       intervalMs: 3000,
       timeoutMs: 1200000,
     });
@@ -261,30 +257,16 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
       </dl>
       <p role="status" className="text-center leading-6 text-content-secondary">No se ha enviado dinero ni se ha verificado un depósito. Este recorrido muestra cómo funcionará el envío.</p>
       <button type="button" onClick={onClose} className="primary-button mx-auto mt-8 block w-full max-w-[344px]">Volver al inicio</button>
-    </div> : <div className="mt-12 flex flex-col items-center text-center">
-      {paymentMethod === "pix" ? <>
-        {/*<p className="mt-3 text-sm font-semibold leading-5">BOLAR · DEMOSTRACIÓN<br />SIN CLAVE PIX DE PAGO</p>*/}
-      </> : <p className="rounded-xl bg-field p-5 text-sm leading-6">Pago en efectivo seleccionado. Los puntos de cobro todavía no están disponibles; esta demostración no acepta dinero.</p>}
-      <p className="mt-10 max-w-[480px] text-xl leading-6 text-content-secondary">Envía dinero a otro país y haz que tu familiar o amigo lo reciba en minutos.</p>
-      <br/>
-      <div className="bolar-ramp-payment-field">
-        <span className="bolar-ramp-payment-label">Estado</span>
-        <div className="bolar-ramp-payment-value">
-          <code>{transactionStatus}</code>
-          <Spinner/>
-        </div>
-      </div>
-      {qrAvailable ? <div>
-        <QrImage name="pix" svg={qrPix} width={184} height={184} alt="qr bridge"/>
-        <p className="mt-3 text-sm font-semibold leading-5">{qrDetail}</p>
-      </div>
-      : <div>
-        <Asset name="qr" width={184} height={184} alt="QR de demostración. No sirve para realizar pagos." />
-      </div>}
-      <button type="button" onClick={acceptBridgeTerms} className="primary-button mt-12 w-full max-w-[344px]">Aceptar los términos en Bridge</button>
-      <button type="button" onClick={continueAtBridge} className="primary-button mt-12 w-full max-w-[344px]">Continua en Bridge</button>
-      <button type="button" onClick={finish} className="primary-button mt-12 w-full max-w-[344px]">Simular pago</button>
-      {/*<p className="mt-4 text-xs leading-5 text-content-secondary">{paymentMethod === "pix" ? "QR de ejemplo, sin valor de pago. La verificación de depósitos estará disponible al integrar el proveedor." : "No se ha registrado ningún pago en efectivo."}</p>*/}
-    </div>}
+    </div> : <PaymentInstructions
+      send={send}
+      paymentMethod={paymentMethod}
+      transactionStatus={transactionStatus}
+      qrAvailable={qrAvailable}
+      qrPix={qrPix}
+      qrDetail={qrDetail}
+      onAcceptTerms={acceptBridgeTerms}
+      onContinueAtBridge={continueAtBridge}
+      onSend={finish}
+    />}
   </>;
 }
