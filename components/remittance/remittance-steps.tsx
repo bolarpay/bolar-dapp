@@ -255,7 +255,6 @@ export function RemittanceSteps({ send, receive, onClose, auth, paymentMethod = 
         <dt>Envías</dt><dd className="text-right">{send} BRL</dd>
         <dt>Recibe</dt><dd className="text-right">{receive} BOB</dd>
       </dl>
-      <p role="status" className="text-center leading-6 text-content-secondary">No se ha enviado dinero ni se ha verificado un depósito. Este recorrido muestra cómo funcionará el envío.</p>
       <button type="button" onClick={onClose} className="primary-button mx-auto mt-8 block w-full max-w-[344px]">Volver al inicio</button>
     </div> : <PaymentInstructions
       send={send}
