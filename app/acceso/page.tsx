@@ -4,7 +4,7 @@ import { Asset } from "@/components/landing/asset";
 import { AccessClient } from "./access-client";
 
 export const metadata: Metadata = {
-  title: "Accede a tu cuenta | Bolar",
+  title: "Accede a tu cuenta",
   description: "Inicia sesión en Bolar y accede a tu wallet.",
 };
 

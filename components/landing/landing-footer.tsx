@@ -1,36 +1,31 @@
+import Link from "next/link";
+import { whatsappSupportUrl } from "@/lib/support";
 import { Asset } from "./asset";
-import { InfoButton } from "./info-button";
 
-const pendingMessage = "Esta sección todavía contiene los datos de ejemplo del diseño de Figma. El equipo de Bolar está preparando el contenido y los canales oficiales.";
-const linkClass = "trim-cap text-left text-sm leading-[1.4] tracking-[0.4px] opacity-80 transition-colors enabled:hover:text-bolar-dark enabled:hover:opacity-100 hover:underline";
+const linkClass = "text-sm leading-6 underline-offset-4 transition-colors hover:text-bolar-dark hover:underline";
 
 export function LandingFooter() {
+  const supportUrl = whatsappSupportUrl(process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER);
   return (
-    // The source design still uses Routeflow placeholder branding and contact data.
-    <footer id="contacto" className="mx-auto mb-[42px] mt-auto w-[calc(100%-32px)] max-w-[1220px] scroll-mt-8 rounded-3xl bg-footer-green px-6 pb-6 pt-10 font-footer text-footer-ink md:px-[55px] md:pb-[25px] md:pt-[61px]" data-node-id="260:14281">
-      <div className="grid gap-10 md:grid-cols-2 xl:min-h-[189px] xl:grid-cols-[482px_253px_222px_1fr] xl:gap-0">
-        <div className="flex flex-col items-start gap-6">
-          <Asset name="footer-logo" width={196} height={32.346} alt="Routeflow — marca de ejemplo del diseño" />
-          <p className="trim-cap text-sm leading-[1.4] tracking-[0.4px]">8 W. South St.Buford, GA 30518<br />5Briarwood LaneVienna, VA 22180 RER</p>
-          <div className="flex gap-8">
-            {(["youtube", "facebook", "whatsapp"] as const).map((name) => <InfoButton key={name} label={`${name}: canal pendiente`} title="Canales de Bolar" message={pendingMessage} className="bolar-social-button rounded-md transition-colors"><Asset name={name} width={32} height={32} /></InfoButton>)}
-          </div>
+    <footer id="contacto" className="mx-auto mb-[42px] mt-auto w-[calc(100%-32px)] max-w-[1220px] scroll-mt-8 rounded-3xl bg-footer-green px-6 py-10 font-footer text-footer-ink md:px-[55px]" data-node-id="260:14281">
+      <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr]">
+        <div className="flex flex-col items-start gap-5">
+          <a href="#inicio" aria-label="BOLAR, volver al inicio" className="rounded-lg bg-white px-2"><Asset name="bolar-logo" width={203} height={56} alt="BOLAR" /></a>
+          <p className="max-w-sm text-sm leading-6">Remesas internacionales.<br />Brasil y Bolivia, un poco más cerca.</p>
         </div>
+        <nav aria-label="Enlaces de BOLAR" className="flex flex-col items-start gap-4">
+          <h2 className="text-lg font-bold">BOLAR</h2>
+          <a href="#calcular-envio" className={linkClass}>Calcular envío</a>
+          <Link href="/acceso" className={linkClass}>Acceder a mi cuenta</Link>
+          <a href="https://github.com/bolarpay/bolar-dapp" target="_blank" rel="noopener noreferrer" className={linkClass}>Desarrolladores</a>
+        </nav>
         <div className="flex flex-col items-start gap-4">
-          <h2 className="trim-cap text-lg font-bold leading-[1.6] tracking-[0.5px]">Información</h2>
-          {["Acerca de nosotros", "Servicios", "Blog"].map((label) => <InfoButton key={label} className={linkClass} title={label} message={pendingMessage}>{label}</InfoButton>)}
-        </div>
-        <div className="flex flex-col items-start gap-4">
-          <h2 className="trim-cap text-lg font-bold leading-[1.6] tracking-[0.5px]">Empresas</h2>
-          {[1, 2, 3].map((item) => <InfoButton key={item} className={linkClass} title="Empresas" message={pendingMessage}>Formulario</InfoButton>)}
-        </div>
-        <div className="flex flex-col items-start gap-4">
-          <h2 className="trim-cap text-lg font-bold leading-[1.6] tracking-[0.5px]">Contacto</h2>
-          {["+1 123456789", "routeflow@info.com", "Phone: +1 12345678"].map((label) => <InfoButton key={label} className={`${linkClass} whitespace-nowrap`} title="Contacto de Bolar" message={pendingMessage}>{label}</InfoButton>)}
+          <h2 className="text-lg font-bold">Atención al cliente</h2>
+          {supportUrl ? <a href={supportUrl} target="_blank" rel="noopener noreferrer" className="secondary-button flex items-center gap-2"><Asset name="whatsapp" width={20} height={20} />WhatsApp</a>
+            : <p className="text-sm leading-6">Nuestro canal de WhatsApp estará disponible pronto.</p>}
         </div>
       </div>
-      <div className="mt-10 overflow-hidden xl:mt-0" aria-hidden="true"><Asset name="footer-divider" width={1110} height={1.0001} /></div>
-      <p className="trim-cap mt-10 text-center text-sm leading-[1.4] tracking-[0.4px] opacity-80">© routeflow 2024 todos los derechos reservados - Diseñado por RouteflowDesign</p>
+      <p className="mt-10 border-t border-bolar-dark/20 pt-6 text-center text-sm leading-6">© {new Date().getFullYear()} BOLAR. Todos los derechos reservados.</p>
     </footer>
   );
 }
