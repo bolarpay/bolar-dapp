@@ -1,5 +1,6 @@
 import { Asset } from "./asset";
 import { InfoButton } from "./info-button";
+import { HeaderWallet } from "./header-wallet";
 
 function Navigation() {
   return <>
